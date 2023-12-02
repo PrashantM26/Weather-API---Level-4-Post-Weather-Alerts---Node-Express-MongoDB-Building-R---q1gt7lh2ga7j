@@ -77,7 +77,9 @@ async function saveWeatherAlert(alertDetails) {
     await saveDataToDatabase(cityDetails);
 
     return { status: 'success', message: 'Weather alert saved successfully' };
-  } catch (error) {
+  } 
+     
+  catch (error) {
     throw new Error('Failed to save weather alert');
   }
   
