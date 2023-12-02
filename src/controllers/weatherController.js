@@ -48,35 +48,30 @@ async function saveDataToDatabase(data) {
 async function saveWeatherAlert(alertDetails) {
    // TODO: Implement this function
    try {
+     
     const cityDetails = await getDataFromDatabase();
     const { city, date, humidity } = alertDetails;
+    const searchedCity = cityDetails.find((element) => element.city === city);
 
-    // Check if the city already exists in the data
-    const existingCity = cityDetails.find((element) => element.city === city);
-
-    if (existingCity) {
-      // City already exists, update the forecast for the specific date
-      if (!existingCity.forecast) {
-        existingCity.forecast = {};
+    if (searchedCity) {
+      if (!searchedCity.forecast) {
+        searchedCity.forecast = {};
       }
-
-      existingCity.forecast[date] = { humidity };
-    } else {
-      // City does not exist, create a new entry
+      searchedCity.forecast[date] = { humidity };
+    } 
+    else {
       const newCity = {
         city,
         forecast: {
           [date]: { humidity },
         },
       };
-
       cityDetails.push(newCity);
     }
 
-    // Save the updated data to the database
     await saveDataToDatabase(cityDetails);
-
     return { status: 'success', message: 'Weather alert saved successfully' };
+     
   } 
      
   catch (error) {
