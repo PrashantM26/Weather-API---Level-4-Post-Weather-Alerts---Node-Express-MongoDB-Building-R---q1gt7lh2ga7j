@@ -47,17 +47,38 @@ async function saveDataToDatabase(data) {
 // Level 4: Post Weather Alerts
 async function saveWeatherAlert(alertDetails) {
    // TODO: Implement this function
-  const cityDetails = await getDataFromDatabase();
-  const { city, date, humidity } = alertDetails;
-  const searchedCity = cityDetails.find((ele) => {
-    ele.city !== city
-  })
+   try {
+    const cityDetails = await getDataFromDatabase();
+    const { city, date, humidity } = alertDetails;
 
-  if(!searchedCity) {
-    cityDetails.forEach
-    if (!cityDetails.ele.forecast) {
-        existingData[cityIndex].forecast = {};
+    // Check if the city already exists in the data
+    const existingCity = cityDetails.find((element) => element.city === city);
+
+    if (existingCity) {
+      // City already exists, update the forecast for the specific date
+      if (!existingCity.forecast) {
+        existingCity.forecast = {};
       }
+
+      existingCity.forecast[date] = { humidity };
+    } else {
+      // City does not exist, create a new entry
+      const newCity = {
+        city,
+        forecast: {
+          [date]: { humidity },
+        },
+      };
+
+      cityDetails.push(newCity);
+    }
+
+    // Save the updated data to the database
+    await saveDataToDatabase(cityDetails);
+
+    return { status: 'success', message: 'Weather alert saved successfully' };
+  } catch (error) {
+    throw new Error('Failed to save weather alert');
   }
   
 }
