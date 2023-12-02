@@ -48,6 +48,17 @@ async function saveDataToDatabase(data) {
 async function saveWeatherAlert(alertDetails) {
    // TODO: Implement this function
   const cityDetails = await getDataFromDatabase();
+  const { city, date, humidity } = alertDetails;
+  const searchedCity = cityDetails.find((ele) => {
+    ele.city !== city
+  })
+
+  if(!searchedCity) {
+    cityDetails.forEach
+    if (!cityDetails.ele.forecast) {
+        existingData[cityIndex].forecast = {};
+      }
+  }
   
 }
 
